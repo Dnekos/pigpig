@@ -52,7 +52,10 @@ public:
 	UInfPrecisionFloat();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "InfPrecisionFloat + LargeFloat", CompactNodeTitle = "+", Keywords = "+ add"), Category = "Math|InfPrecisionFloat")
-	UInfPrecisionFloat* Add(const ULargeFloat* rhs);
+	UInfPrecisionFloat* Add(const ULargeFloat* rhs, bool& completed);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "InfPrecisionFloat - LargeFloat", CompactNodeTitle = "-", Keywords = "- subtract"), Category = "Math|InfPrecisionFloat")
+	UInfPrecisionFloat* Subtract(const ULargeFloat* rhs, bool& completed);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "To String", Keywords = "to string inf infinite precision float"))
 	FString ToString();

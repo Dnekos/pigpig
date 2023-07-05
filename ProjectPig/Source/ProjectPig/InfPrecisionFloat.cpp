@@ -10,12 +10,11 @@ UInfPrecisionFloat::UInfPrecisionFloat()
 	mDigits.Init(0, 250);
 }
 
-UInfPrecisionFloat* UInfPrecisionFloat::Add(const ULargeFloat* rhs)
+// Helper Function
+// 
+void LargeFloatToStack(const ULargeFloat* lf, TArray<int>& stack)
 {
-	// stack
-	TArray<int> stack;
-
-	float v = rhs->mValue, e = rhs->mExponent;
+	float v = lf->mValue, e = lf->mExponent;
 	// loop through
 	while(v != 0)
 	{
@@ -28,6 +27,13 @@ UInfPrecisionFloat* UInfPrecisionFloat::Add(const ULargeFloat* rhs)
 
 	for(int i = 0; i < e; i++)
 		stack.Add(0);
+}
+
+UInfPrecisionFloat* UInfPrecisionFloat::Add(const ULargeFloat* rhs, bool& completed)
+{
+	// stack
+	TArray<int> stack;
+	LargeFloatToStack(rhs, stack);
 	
 	// setup stack variables
 	int idx = stack.Num() - rhs->mExponent;
@@ -49,6 +55,37 @@ UInfPrecisionFloat* UInfPrecisionFloat::Add(const ULargeFloat* rhs)
 		idx++;
 	}
 
+	completed = true;
+	return this;
+}
+
+UInfPrecisionFloat* UInfPrecisionFloat::Subtract(const ULargeFloat* rhs, bool& completed)
+{
+	// stack
+	TArray<int> stack;
+	LargeFloatToStack(rhs, stack);
+
+	// setup stack variables
+	int idx = stack.Num() - rhs->mExponent;
+	int carry = 0;
+	int holder = 0;
+
+	while(stack.Num() > 0 || carry != 0)
+	{
+		holder = mDigits[idx] - ((stack.Num() > 0) ? stack.Pop() : 0) - carry;
+		carry = 0;
+
+		if(holder < 0)
+		{
+			holder += 10;
+			carry = 1;
+		}
+
+		mDigits[idx] = holder;
+		idx++;
+	}
+
+	completed = true;
 	return this;
 }
 
@@ -56,18 +93,10 @@ FString UInfPrecisionFloat::ToString()
 {
 	FString str;
 
-	{
-		UE_LOG(LogTemp, Warning, TEXT("=========================== UInfPrecisionFloat ==========================="));
-	}
-
 	int idx = 0;
 	int lastNonZero = 0;
 	for(const FUInt4& d : mDigits)
 	{
-		{
-			UE_LOG(LogTemp, Warning, TEXT("{ %d | %s %s %s %s } "), (int)d, d.x[0] ? TEXT("True") : TEXT("False"), d.x[1] ? TEXT("True") : TEXT("False"), d.x[2] ? TEXT("True") : TEXT("False"), d.x[3] ? TEXT("True") : TEXT("False"));
-		}
-
 		if((int)d != 0)
 			lastNonZero = idx;
 

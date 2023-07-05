@@ -40,9 +40,8 @@ void AGenerator::DoGenerate()
 	UInfPrecisionFloat* storageValue = mTargetStorage->GetValue();
 
 	// add to storage
-	storageValue->Add(v);
-
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Generated: %s"), *storageValue->ToString()));
+	bool b = false;
+	storageValue->Add(v, b);
 }
 
 void AGenerator::SetTargetStorage(AStorage* storage)

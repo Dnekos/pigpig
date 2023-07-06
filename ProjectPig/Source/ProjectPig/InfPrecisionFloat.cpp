@@ -29,12 +29,12 @@ void LargeFloatToStack(const ULargeFloat* lf, TArray<int>& stack)
 		stack.Add(0);
 }
 
-UInfPrecisionFloat* UInfPrecisionFloat::Add(const ULargeFloat* rhs, bool& completed)
+UInfPrecisionFloat* UInfPrecisionFloat::Add(const ULargeFloat* rhs)
 {
 	// stack
 	TArray<int> stack;
 	LargeFloatToStack(rhs, stack);
-	
+
 	// setup stack variables
 	int idx = stack.Num() - rhs->mExponent;
 	int carry = 0;
@@ -55,11 +55,10 @@ UInfPrecisionFloat* UInfPrecisionFloat::Add(const ULargeFloat* rhs, bool& comple
 		idx++;
 	}
 
-	completed = true;
 	return this;
 }
 
-UInfPrecisionFloat* UInfPrecisionFloat::Subtract(const ULargeFloat* rhs, bool& completed)
+UInfPrecisionFloat* UInfPrecisionFloat::Subtract(const ULargeFloat* rhs)
 {
 	// stack
 	TArray<int> stack;
@@ -85,7 +84,6 @@ UInfPrecisionFloat* UInfPrecisionFloat::Subtract(const ULargeFloat* rhs, bool& c
 		idx++;
 	}
 
-	completed = true;
 	return this;
 }
 

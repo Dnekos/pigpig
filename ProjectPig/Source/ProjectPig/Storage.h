@@ -22,6 +22,12 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get Value", Keywords = "set value large float"))
 		UInfPrecisionFloat* GetValue() { return mValue; }
 
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Add Large Float", Keywords = "add large float"))
+		bool AddLargeFloat(ULargeFloat* largeFloat);
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Subtract Large Float", Keywords = "subtract large float"))
+		bool SubtractLargeFloat(ULargeFloat* largeFloat);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

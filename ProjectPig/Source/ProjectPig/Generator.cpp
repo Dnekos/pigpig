@@ -40,8 +40,7 @@ void AGenerator::DoGenerate()
 	UInfPrecisionFloat* storageValue = mTargetStorage->GetValue();
 
 	// add to storage
-	bool b = false;
-	storageValue->Add(v, b);
+	storageValue->Add(v);
 }
 
 void AGenerator::SetTargetStorage(AStorage* storage)

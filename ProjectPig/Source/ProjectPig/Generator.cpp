@@ -17,7 +17,7 @@ void AGenerator::BeginPlay()
 {
 	Super::BeginPlay();
 
-	AGlobalTimer::GetGlobalTimer()->OnTenthSecond.AddDynamic(this, &AGenerator::DoGenerate);
+	AGlobalTimer::GetGlobalTimer()->GetDelegate().AddDynamic(this, &AGenerator::DoGenerate);
 }
 
 ULargeFloat* AGenerator::Generate_Implementation()

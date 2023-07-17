@@ -8,18 +8,22 @@ AGlobalTimer* AGlobalTimer::smInstance = nullptr;
 // Sets default values
 AGlobalTimer::AGlobalTimer()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	smInstance = this;
+
+	// add 10 delegates to delegate array
+	for(int i = 0; i < 10; i++)
+		OnGenerateCall.Add(FGlobalTimerDelegate());
 }
 
 // Called when the game starts or when spawned
 void AGlobalTimer::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	GetWorldTimerManager().SetTimer(mTimerHandle, this, &AGlobalTimer::CallTenthSecond, 0.1, true, 0);
+
+	GetWorldTimerManager().SetTimer(mTimerHandle, this, &AGlobalTimer::CallGenerationEvent, 0.1, true, 0);
 }
 
 // Called every frame
@@ -28,44 +32,16 @@ void AGlobalTimer::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AGlobalTimer::CallTenthSecond()
+FGlobalTimerDelegate& AGlobalTimer::GetDelegate()
 {
-	mTenths++;
-	OnTenthSecond.Broadcast();
-
-	if(mTenths % 10 == 0)
-	{
-		CallOneSecond();
-		mTenths = 0;
-	}
+	int i = mDeleSetCounter;
+	mDeleSetCounter = (mDeleSetCounter + 1) % 10; // looping increment
+	return OnGenerateCall[i];
 }
 
-void AGlobalTimer::CallOneSecond()
+void AGlobalTimer::CallGenerationEvent()
 {
-	mOnes++;
-	OnOneSecond.Broadcast();
-
-	if(mOnes % 10 == 0)
-	{
-		CallTenSeconds();
-		mOnes = 0;
-	}
-}
-
-void AGlobalTimer::CallTenSeconds()
-{
-	mTens++;
-	OnTenSeconds.Broadcast();
-
-	if(mTens % 10 == 0)
-	{
-		CallHundredSeconds();
-		mTens = 0;
-	}
-}
-
-void AGlobalTimer::CallHundredSeconds()
-{
-	OnHundredSeconds.Broadcast();
+	OnGenerateCall[mDeleCallCounter].Broadcast();
+	mDeleCallCounter = (mDeleCallCounter + 1) % 10; // looping increment
 }
 

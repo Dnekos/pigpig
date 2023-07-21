@@ -14,9 +14,9 @@ UInfPrecisionFloat::UInfPrecisionFloat()
 // 
 void LargeFloatToStack(const ULargeFloat* lf, TArray<int>& stack)
 {
-	float v = lf->mValue, e = lf->mExponent;
+	float v = lf->mValue, e = lf->mExponent + 1;
 	// loop through
-	while(v != 0)
+	while(v != 0 && e > 0)
 	{
 		int digit = (int)floor(v) % 10;
 		v -= digit;
@@ -36,7 +36,7 @@ UInfPrecisionFloat* UInfPrecisionFloat::Add(const ULargeFloat* rhs)
 	LargeFloatToStack(rhs, stack);
 
 	// setup stack variables
-	int idx = stack.Num() - rhs->mExponent;
+	int idx = stack.Num() - rhs->mExponent - 1;
 	int carry = 0;
 	int holder = 0;
 
@@ -65,7 +65,7 @@ UInfPrecisionFloat* UInfPrecisionFloat::Subtract(const ULargeFloat* rhs)
 	LargeFloatToStack(rhs, stack);
 
 	// setup stack variables
-	int idx = stack.Num() - rhs->mExponent;
+	int idx = stack.Num() - rhs->mExponent - 1;
 	int carry = 0;
 	int holder = 0;
 

@@ -31,12 +31,12 @@ bool CanSubtractFrom(UInfPrecisionFloat* ipf, ULargeFloat* lf)
 	lfStr = lfStr.Replace(TEXT("."), TEXT(""));
 
 	int ipfLen = ipfStr.Len();
-	int lfLen = lf->mExponent;
+	int lfLen = lf->mExponent + 1;
 
 	if(ipfLen > lfLen) return true;
 	if(ipfLen < lfLen) return false;
 
-	for(int i = 0; i < lfStr.Len(); i++)
+	for(int i = 0; i < ipfLen; i++)
 	{
 		if(ipfStr[i] > lfStr[i]) return true;
 		if(ipfStr[i] < lfStr[i]) return false;
